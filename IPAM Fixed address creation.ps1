@@ -278,14 +278,14 @@ Begin {
         $RemoveWorksheetErrors = $FixedAddressWorksheetErrors = $ConflictingWorksheetErrors = @()
 
         $FixedAddressWorksheet = @(Import-Excel -Path $ImportFile -WorksheetName 'FixedAddress' |
-            Remove-ImportExcelHeaderProblemOnEmtpySheetHC |
+            Remove-ImportExcelHeaderProblemOnEmptySheetHC |
             Select-Object -Property @{N = 'Status'; E = { $null } }, *,
             @{N = 'Action'; E = { , @() } },
             @{N = 'Error'; E = { $null } },
             @{N = 'IncorrectFields'; E = { $null } } -ExcludeProperty Status, Action, Error, IncorrectFields )
 
         $RemoveWorksheet = @(Import-Excel -Path $ImportFile -WorksheetName 'Remove' |
-            Remove-ImportExcelHeaderProblemOnEmtpySheetHC |
+            Remove-ImportExcelHeaderProblemOnEmptySheetHC |
             Select-Object -Property @{N = 'Status'; E = { $null } }, *,
             @{N = 'Action'; E = { , @() } },
             @{N = 'Error'; E = { $null } } -ExcludeProperty Status, Action, Error )
