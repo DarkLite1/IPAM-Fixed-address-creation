@@ -110,8 +110,8 @@ Param (
     [String]$Environment,
     [Parameter(Mandatory)]
     [String[]]$MailTo,
-    [String]$LogFolder = $env:POWERSHELL_LOG_FOLDER,
-    [String]$ScriptAdmin = $env:POWERSHELL_SCRIPT_ADMIN
+    [String]$LogFolder = "$env:POWERSHELL_LOG_FOLDER\Application specific\IPAM\$ScriptName",
+    [String[]]$ScriptAdmin = $env:POWERSHELL_SCRIPT_ADMIN
 )
 
 Begin {
@@ -147,26 +147,25 @@ Begin {
         Write-EventLog @EventStartParams
         Get-ScriptRuntimeHC -Start
 
-        #region Test country code in ScriptName
-        if ($ScriptName -notmatch '\w\s\([a-z]{3}') {
-            throw "Script name '$ScriptName' is missing the country code suffix"
-        }
-        #endregion
-
         #region Test ImportFile present
         if (-not (Test-Path -Path $ImportFile -PathType Leaf)) {
             throw "Import file '$ImportFile' not found"
         }
         #endregion
 
-        #region Create log folder
-        $LogParams = @{
-            LogFolder    = New-FolderHC -Path $LogFolder -ChildPath "IPAM\$($ScriptName.Split('(', 2)[0]).Trim())\$scriptName"
-            Name         = $ScriptName
-            Date         = 'ScriptStartTime'
-            NoFormatting = $true
+        #region Logging
+        try {
+            $logParams = @{
+                LogFolder    = New-Item -Path $LogFolder -ItemType 'Directory' -Force -ErrorAction 'Stop'
+                Name         = $ScriptName
+                Date         = 'ScriptStartTime'
+                NoFormatting = $true
+            }
+            $logFile = New-LogFileNameHC @LogParams
         }
-        $LogFile = New-LogFileNameHC @LogParams
+        Catch {
+            throw "Failed creating the log folder '$LogFolder': $_"
+        }
         #endregion
 
         #region Import file properties

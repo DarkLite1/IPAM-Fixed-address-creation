@@ -68,33 +68,6 @@ BeforeAll {
     Mock Write-EventLog
     Mock Test-Connection
 }
-
-Describe 'prerequisites' {
-    Context 'send an error mail to the admin when' {
-        It "the script name is missing the country code 'xxxx (xxx)'" {
-            $testNewParams = Copy-ObjectHC -Name $testParams
-            $testNewParams.ScriptName = 'Wrong'
-
-            .$testScript @testNewParams
-
-            Should -Invoke Send-MailHC -Exactly 1 -ParameterFilter {
-                (&$MailAdminParams) -and ($Message -like "*missing the country code suffix*")
-            }
-        } 
-    }
-    Context 'send no error mail when' {
-        It "the script name is having a country code 'xxxx (xxx xxxxxx)'" {
-            $testNewParams = Copy-ObjectHC -Name $testParams
-            $testNewParams.ScriptName = 'Test (BNL Apples)'
-
-            .$testScript @testNewParams
-
-            Should -Invoke Send-MailHC -Exactly 0 -ParameterFilter {
-                (&$MailAdminParams) -and ($Message -like "*missing the country code suffix*")
-            }
-        } 
-    }
-}
 Describe 'Import file' {
     Context 'send an error mail to the admin when' {
         It 'the file is not found' {
