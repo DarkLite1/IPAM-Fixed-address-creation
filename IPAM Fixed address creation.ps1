@@ -1,4 +1,6 @@
 #Requires -Version 5.1
+#Requires -Modules ImportExcel
+#Requires -Modules Toolbox.HTML, Toolbox.EventLog, Toolbox.FileAndFolder
 
 <#
 .SYNOPSIS
