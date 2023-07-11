@@ -2,12 +2,6 @@
 #Requires -Version 5.1
 
 BeforeAll {
-    $MailAdminParams = {
-        ($To -eq $ScriptAdmin) -and ($Priority -eq 'High') -and ($Subject -eq 'FAILURE')
-    }
-    $MailUsersParams = {
-        ($To -eq $MailTo) -and ($Priority -eq 'High') -and ($Subject -like 'FAILURE - Incorrect input')
-    }
     $testFixedAddressWorksheet = @(
         [PSCustomObject]@{
             Name          = 'Test'
@@ -54,6 +48,15 @@ BeforeAll {
         MailTo      = 'BobLeeSwagger@shooter.net'
         ImportFile  = New-Item 'TestDrive:/IPAM.xlsx' -ItemType File
         LogFolder   = New-Item 'TestDrive:/Log' -ItemType Directory
+        ScriptAdmin = 'admin@contoso.com'
+    }
+
+    $MailAdminParams = {
+        ($To -eq $testParams.ScriptAdmin) -and ($Priority -eq 'High') -and 
+        ($Subject -eq 'FAILURE')
+    }
+    $MailUsersParams = {
+        ($To -eq $testParams.MailTo) -and ($Priority -eq 'High') -and ($Subject -like 'FAILURE - Incorrect input')
     }
 
     Mock Get-IpamFixedAddressHC

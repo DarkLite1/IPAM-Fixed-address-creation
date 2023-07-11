@@ -113,7 +113,10 @@ Param (
     [Parameter(Mandatory)]
     [String[]]$MailTo,
     [String]$LogFolder = "$env:POWERSHELL_LOG_FOLDER\Application specific\IPAM\$ScriptName",
-    [String[]]$ScriptAdmin = $env:POWERSHELL_SCRIPT_ADMIN
+    [String[]]$ScriptAdmin = @(
+        $env:POWERSHELL_SCRIPT_ADMIN,
+        $env:POWERSHELL_SCRIPT_ADMIN_BACKUP
+    )
 )
 
 Begin {
@@ -937,7 +940,7 @@ End {
                 })
 
             $Error.Exception.Message | Select-Object @{N = 'Error message'; E = { $_ } } |
-            Export-Excel @ExcelParams -WorkSheetName 'Errors' -TableName 'Errors'
+            Export-Excel @ExcelParams -WorksheetName 'Errors' -TableName 'Errors'
 
             $MailParams.Attachments = $ExcelParams.Path
         }
