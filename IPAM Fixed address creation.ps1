@@ -80,27 +80,7 @@
 .LINK
     https://ipam/wapidoc
     https://ipam/wapidoc/objects/fixedaddress.html?highlight=match_client#fixedaddress.match_client
-
-.NOTES
-    CHANGELOG
-    2019/06/04 Script born
-    2019/06/11 Added support for IPAM functions like net available free ip
-               Used by setting ipv4addr to 'func:nextavailableip:10.20.32.0/24'
-    2019/06/12 Added a check to verify if the client is online before we add it in IPAM
-    2019/06/13 Added a check to verify if the IP or hostname is used or known by DNS
-    2019/06/14 Send input file errors to the users instead of the admin
-               Updated help section
-               Check ddns_hostname with and without domain name
-    2019/06/26 Fixed a bug where it was not possible to update the ipv4address when it was moved to another subnet
-               The API can't handle the update, so a remove and recreation of the address reservation was required
-               Added the worksheet 'Remove' to allow users to simply removed address reservations based on
-               name, ddns_hostname, ipv4addr or mac
-    2019/06/27 Added the worksheet 'Remove' to allow the deletion of address reservations
-    2019/11/13 Skip online test for IP and/or dns hostname when OverWrite is set to true
-               Improved Pester tests
-               Fixed spelling mistakes
-
-    AUTHOR Brecht.Gijbels@heidelbergcement.com #>
+#>
 
 [CmdLetBinding()]
 Param (
